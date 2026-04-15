@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { getDashboard, adminListPosts, adminListComments, listUsers, updateUser } from '../controllers/adminController.js';
+import { authenticate, requireRole } from '../middleware/auth.js';
+const router = Router();
+router.use(authenticate, requireRole('admin'));
+router.get('/dashboard', getDashboard);
+router.get('/posts',     adminListPosts);
+router.get('/comments',  adminListComments);
+router.get('/users',     listUsers);
+router.patch('/users/:id', updateUser);
+export default router;

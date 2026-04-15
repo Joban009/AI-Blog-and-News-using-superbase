@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { generateContent, improveContent } from '../controllers/aiController.js';
+import { authenticate, requireRole } from '../middleware/auth.js';
+import { rateLimit } from 'express-rate-limit';
+const router = Router();
+const lim = rateLimit({ windowMs: 60000, max: 10 });
+router.use(authenticate, requireRole('admin'));
+router.post('/generate', lim, generateContent);
+router.post('/improve',  lim, improveContent);
+export default router;
