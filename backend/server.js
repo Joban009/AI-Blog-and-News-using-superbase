@@ -40,10 +40,30 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+      
+      const allowedOrigins = [
+        "http://localhost:5173",
+        process.env.CORS_ORIGIN
+      ];
+
+      // Allow any vercel.app subdomain or localhost
+      const isVercel = origin.endsWith(".vercel.app");
+      const isLocal = origin.startsWith("http://localhost");
+
+      if (allowedOrigins.includes(origin) || isVercel || isLocal) {
+        callback(null, true);
+      } else {
+        console.warn(`Blocked by CORS: ${origin}`);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   }),
 );
+
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 300 }));
 app.use(express.json({ limit: "2mb" }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
