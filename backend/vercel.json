@@ -9,7 +9,6 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "index.js",
       "methods": ["OPTIONS"],
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "https://ai-blog-and-news-using-superbase.vercel.app" },
@@ -25,5 +24,6 @@
     }
   ]
 }
+
 
 
