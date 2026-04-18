@@ -46,8 +46,9 @@ app.use(
       
       const allowedOrigins = [
         "http://localhost:5173",
+        "https://ai-blog-and-news-using-superbase.vercel.app",
         process.env.CORS_ORIGIN
-      ];
+      ].filter(Boolean);
 
       // Allow any vercel.app subdomain or localhost
       const isVercel = origin.endsWith(".vercel.app");
